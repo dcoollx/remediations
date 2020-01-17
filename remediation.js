@@ -106,3 +106,11 @@ videoContext.each(function(){
   $ae(this).find('jwlogo').attr('alt','JW Player');
 
 });
+//fixes redundant navigation anouncement
+ele.outerFind('nav[aria-label*=Navigation]').each(function(){
+  var oldLabel = $ae(this).attr('aria-label');
+  if(!oldLabel)//skip if there is no aria-label
+    return;
+  var newLabel = oldLabel.replace(/nav.*/i,'').trim();//remove nav or any variation of it from string
+  $ae(this).attr('aria-label',newLabel);
+});
