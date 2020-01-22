@@ -21,6 +21,10 @@ class Node{
       this.level = Number(element.tagName.split('')[1]);
     }
   }
+  updateLvl(){
+    this.element.setAttribute('role','heading');
+    this.element.setAttribute('aria-level',this.level);
+  }
 }//end node
 class LL{
   constructor(){
@@ -79,9 +83,25 @@ function setHeaderLevelofElement(element,lvl){
   element.setAttribute('role','heading');
   element.setAttribute('role','heading');
 }
-function remHeaders(forcedHeader=null,ignore=null){//currently only take selector strings
-  if(forcedHeader)
-    setHeaderLevelofElement(document.querySelector(forcedHeader),'1')
+let oneStepRule = (n)=>{
+  let nextlvl = n.next.level;
+  if(nextlvl > n.level + 1 ){
+  nextlvl = n.level + 1;
+  n.updateLvl();
+  
+  }else if(nextlvl < n.level - 1){
+    nextlvl = n.level - 1;
+    n.updateLvl();
+  }
+  
+}
+
+
+function remHeaders(forcedHeader=null,ignore=null, mainHeaderConfirmed = false){//currently only take selector strings
+  if(forcedHeader){
+    setHeaderLevelofElement(document.querySelector(forcedHeader),'1');
+    mainHeaderConfirmed = true;
+  }
 let list = new LL();
 list.fromArray(document.querySelectorAll(':header'));
 let mainHeader = ll.traverse(n=>n.level===1);//create sub ll
@@ -102,11 +122,9 @@ while(n.next){
 if(n.level ===1){
   setHeaderLevelofNode(n,'2')
   n = n.next;//increment
+    }
+  } 
+  subList.traverse(n=>oneStepRule(n));//aply one ste rule to sub list
+  list.traverse(n=>n.element.role = 'presentation');
 }
-let oneStepRule = (n)=>{
-let nextlvl = n.next.level;
-if(nextlvl > )
 
-}
-
-}

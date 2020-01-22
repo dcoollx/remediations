@@ -114,3 +114,10 @@ ele.outerFind('nav[aria-label*=Navigation]').each(function(){
   var newLabel = oldLabel.replace(/nav.*/i,'').trim();//remove nav or any variation of it from string
   $ae(this).attr('aria-label',newLabel);
 });
+
+//add keyboard support
+ele.outerFind(selector).on('keypress',function(e){
+  if(e.keyCode === 32 || e.keyCode === 13){
+    this.click();
+  }
+});
