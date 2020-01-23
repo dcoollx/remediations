@@ -80,33 +80,37 @@ function setHeaderLevelofElement(element,lvl){
   element.setAttribute('role','heading');
 }
 function remHeaders(forcedHeader=null,ignore=null){//currently only take selector strings
-  if(forcedHeader)
-    setHeaderLevelofElement(document.querySelector(forcedHeader),'1')
-let list = new LL();
-list.fromArray(document.querySelectorAll(':header'));
-let mainHeader = ll.traverse(n=>n.level===1);//create sub ll
-if(mainHeader.next===null){
+  if(forcedHeader){
+    setHeaderLevelofElement(document.querySelector(forcedHeader),'1');
+  }
+  let list = new LL();
+  list.fromArray(document.querySelectorAll(':header'));
+  let mainHeader = ll.traverse(n=>n.level===1);//create sub ll
+  if(mainHeader.next===null){
   //there is no main header
-  let logoHeader = document.querySelector('img[href="/"]');//main logo
-  logoHeader.setAttribute('role','heading');
-  logoHeader.setAttribute('aria-level','1');
-  remHeaders();//restart function now that H1 is set
-}
-mainHeader.prev.next = null;
-mainHeader.prev = null;
-let subList = new LL();
-subList._addAsNode(mainHeader);//todo applie one step rules for sublist, for list aplly specialized checks
-//set any lvl 1 other than main to lvl 2
-let n = mainHeader.next;
-while(n.next){
-if(n.level ===1){
-  setHeaderLevelofNode(n,'2')
-  n = n.next;//increment
-}
-let oneStepRule = (n)=>{
-let nextlvl = n.next.level;
-if(nextlvl > )
+    let logoHeader = document.querySelector('img[href="/"]');//main logo
+    logoHeader.setAttribute('role','heading');
+    logoHeader.setAttribute('aria-level','1');
+    remHeaders();//restart function now that H1 is set
+  }
+  mainHeader.prev.next = null;
+  mainHeader.prev = null;
+  let subList = new LL();
+  subList._addAsNode(mainHeader);//todo apply one step rules for sublist, for list aplly specialized checks
+  //set any lvl 1 other than main to lvl 2
+  let n = mainHeader.next;
+  subList.traverse((n)=>{
+    if(n.next.level ===1){
+      setHeaderLevelofNode(n.next,'2');
+    }
+    return false;//goto end
+  });
+  let oneStepRule = (n)=>{
+    let nextlvl = n.next.level;
+    if(nextlvl > n.level + 2){
+      //create a new grouping
 
-}
+    }
 
+  };
 }
