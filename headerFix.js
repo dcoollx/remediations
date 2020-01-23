@@ -39,6 +39,7 @@ class LL{
   constructor(){
     this.head = null;
     this.tail = null;//needed?
+    this.mainHeader;
 
   }
   traverse(callback = ()=>false){
@@ -82,6 +83,16 @@ class LL{
   fromArray(arr){
     arr.forEach(i=>this.push(i));
   }
+  _display(){
+    let output = '';
+    this.traverse(n=>{
+      output += n.element.tagName + ' -> ';
+      return false;
+
+    });
+    console.log(output);
+    return output;
+  }
 }
 
 function setHeaderLevelofNode(n,lvl){
@@ -92,15 +103,18 @@ function setHeaderLevelofElement(element,lvl){
   element.setAttribute('role','heading');
   element.setAttribute('role','heading');
 }
-let oneStepRule = (n)=>{
-  let nextlvl = n.next.level;
-  if(nextlvl > n.level + 1 ){
-    n.next.setLevel(n.level + 1);
-    n.updateLvl();
+let oneStepRule = (current)=>{
+  let nextlvl = current.next.level;
+  if(nextlvl > current.level ){
+    if(Math.abs(nextlvl - current.level) >= 2 ){//out side range
+      current.next.setLevel(current.level + 1);
+      current.next.updateLvl();
+    }
   
-  }else if(nextlvl < n.level - 1){//todo this is wrong, i want a diff of more than 2
-    n.next.setLevel(n.level - 1);
-    n.updateLvl();
+  }else if(nextlvl < current.level){//todo this is wrong, i want a diff of more than 2
+    if(Math.abs(nextlvl - current.level) >= 2)
+    current.next.setLevel(current.level - 1);
+    current.next.updateLvl();
   }
   
 };
@@ -114,7 +128,7 @@ function remHeaders(forcedHeader=null,ignore=null, mainHeaderConfirmed = false){
   }
   let list = new LL();
   list.fromArray(document.querySelectorAll('h1,h2,h3,h4,h5,h6,[role="heading"]'));
-  console.log(list);
+  console.log(list._display());
   let mainHeader = list.traverse(n=>n.level===1);//create sub ll
   if(mainHeader.next===null){
   //there is no main header
@@ -123,6 +137,7 @@ function remHeaders(forcedHeader=null,ignore=null, mainHeaderConfirmed = false){
     logoHeader.setAttribute('aria-level','1');
     remHeaders();//restart function now that H1 is set
   }
+  list.mainHeader = mainHeader;
   let subList = new LL();
   if(mainHeader.prev !== null){//if main is not top of list
     mainHeader.prev.next = null;
