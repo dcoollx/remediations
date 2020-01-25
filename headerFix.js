@@ -7,8 +7,8 @@ class Node{
     let headerTags = ['h1','h2','h3','h4','h5','h6'];
     if(!headerTags.includes(element.tagName.toLowerCase())){
       //not a header tag, check for role
-      if(element.role !== 'header'){
-        throw new TypeError('needs to be a H tag or have role set to header, to add non-header element use force header argument');
+      if(element.getAttribute('role') !== 'heading'){
+        throw new TypeError('needs to be a H tag or have role set to heading, to add non-header element use force header argument');
         
       }else{
         //has role header
@@ -86,11 +86,8 @@ class LL{
   _display(){
     let output = '';
     this.traverse(n=>{
-      output += n.element.tagName + ' -> ';
-      return false;
-
+      output += n.element.attributes['aria-level'] ? n.element.tagName + '(level '+ n.element.getAttribute('aria-level') + ') ->' :  n.element.tagName + ' -> ';
     });
-    console.log(output);
     return output;
   }
 }
@@ -112,9 +109,10 @@ let oneStepRule = (current)=>{
     }
   
   }else if(nextlvl < current.level){//todo this is wrong, i want a diff of more than 2
-    if(Math.abs(nextlvl - current.level) >= 2)
-    current.next.setLevel(current.level - 1);
-    current.next.updateLvl();
+    if(Math.abs(nextlvl - current.level) >= 2){
+      current.next.setLevel(current.level - 1);
+      current.next.updateLvl();
+    }
   }
   
 };
@@ -129,26 +127,26 @@ function remHeaders(forcedHeader=null,ignore=null, mainHeaderConfirmed = false){
   let list = new LL();
   list.fromArray(document.querySelectorAll('h1,h2,h3,h4,h5,h6,[role="heading"]'));
   console.log(list._display());
-  let mainHeader = list.traverse(n=>n.level===1);//create sub ll
-  if(mainHeader.next===null){
+  list.mainHeader = list.traverse(n=>n.level===1);//create sub ll
+  if(list.mainHeader.next===null){
   //there is no main header
     let logoHeader = document.querySelector('img[href="/"]');//main logo
     logoHeader.setAttribute('role','heading');
     logoHeader.setAttribute('aria-level','1');
     remHeaders();//restart function now that H1 is set
   }
-  list.mainHeader = mainHeader;
   let subList = new LL();
-  if(mainHeader.prev !== null){//if main is not top of list
-    mainHeader.prev.next = null;
-    mainHeader.prev = null;
-    subList._addAsNode(mainHeader);//todo applie one step rules for sublist, for list aplly specialized checks
+  if(list.mainHeader.prev !== null){//if main is not top of list
+    list.mainHeader.prev.next = null;
+    list.mainHeader.prev = null;
+    subList._addAsNode(list.mainHeader);//todo applie one step rules for sublist, for list aplly specialized checks
   //set any lvl 1 other than main to lvl 2
   }else{
     //there is no sublist
     subList = list;
   }
-  let n = mainHeader.next;
+  console.log('sublist',subList._display());
+  let n = list.mainHeader.next;
   while(n.next){
     if(n.level ===1){
       setHeaderLevelofNode(n,'2');
