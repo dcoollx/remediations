@@ -1,10 +1,12 @@
 class Node{
   constructor(element,prev){
     this.element = element;
+    this.weight = 0;
     this.next = null;
     this._lvlChanged = false;
     this.prev = prev;//needed?
     let headerTags = ['h1','h2','h3','h4','h5','h6'];
+    this.assignWeight();
     if(!headerTags.includes(element.tagName.toLowerCase())){
       //not a header tag, check for role
       if(element.getAttribute('role') !== 'heading'){
@@ -26,6 +28,16 @@ class Node{
     this._lvlChanged = true;
     this.level = lvl;
 
+  }
+  assignWeight(){
+    let count = 0;
+    let n = this.element;
+    while(n !== document.body){
+      count++;
+      n=n.parentElement;
+    }
+    this.weight = count;
+  
   }
   updateLvl(){
     if(this._lvlChanged){
@@ -86,7 +98,7 @@ class LL{
   _display(){
     let output = '';
     this.traverse(n=>{
-      output += n.element.attributes['aria-level'] ? n.element.tagName + '(level '+ n.element.getAttribute('aria-level') + ') ->' :  n.element.tagName + ' -> ';
+      output += n.element.attributes['aria-level'] ? n.element.tagName + '(level '+ n.element.getAttribute('aria-level') + ') weight( '+ n.weight + ' ) ->' :  n.element.tagName + ' weight( '+ n.weight + ' ) -> ';
     });
     return output;
   }
