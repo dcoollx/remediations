@@ -98,11 +98,12 @@ class LL{
   _display(){
     let output = '';
     this.traverse(n=>{
-      output += n.element.attributes['aria-level'] ? n.element.tagName + '(level '+ n.element.getAttribute('aria-level') + ') weight( '+ n.weight + ' ) ->' :  n.element.tagName + ' weight( '+ n.weight + ' ) -> ';
+      output += n.element.attributes['aria-level'] ? n.element.tagName + '[level '+ n.element.getAttribute('aria-level') + '] weight( '+ n.weight + ' ) ->' :  n.element.tagName + ' weight( '+ n.weight + ' ) -> ';
     });
     return output;
   }
 }
+//todo check if page is skipped a lvl.
 
 function setHeaderLevelofNode(n,lvl){
   n.element.setAttribute('role','heading');
@@ -130,7 +131,7 @@ let oneStepRule = (current)=>{
 };
 
 
-function remHeaders(forcedHeader=null,ignore=null, mainHeaderConfirmed = false){//currently only take selector strings
+function remHeaders(forcedHeader=null,ignore=null, mainHeaderConfirmed = false, notHeaders = null){//currently only take selector strings
   console.log('starting header rem');
   if(forcedHeader){
     setHeaderLevelofElement(document.querySelector(forcedHeader),'1');
