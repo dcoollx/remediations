@@ -1,13 +1,27 @@
 /**
- * list of functions that make remdiations easier
+ * This API was developed with the intent to make our lives easier, increase productivity,
+and to make our remediations a little more uniform. The Remediation API is a library of
+functions that we can utilize to do most of the common remediations we encounter.
  * when used inside of a rem, use api.[method_name]
  * while in the console use AudioEye.remApi.[method_name]
  * @property {Object} pres - shortcut for role presentation
+ * @property {Object} rmv - short for make invisble to AT
+ * @property {Object} btn - short for properties of a proper button
+ * @property {Object} acd - short for properties of an accordion
+ * @property {Object} dlb - short for dialog attribute
+ * @property {Object} expt - short for expanded true
+ * @property {Object} expf - short for expanded false
  * @static
  */
 class api{
   static constructor(){
     this.pres = {'role':'presentation'};
+    this.rmv = {'role':'presentation', 'aria-hidden':'true', 'tabindex':'-1'};
+    this.btn = {'role':'button', 'tabindex':'0', 'data-ae-blurbtype':'button'};
+    this.acd = {'aria-expanded':'false', 'role':'button', 'tabindex':'0'};
+    this.dlg = {'role':'dialog'};
+    this.expt = {'aria-expanded':'true'};
+    this.expf = {'aria-expanded':'false'};
   }
    /**
     * 
@@ -33,8 +47,8 @@ class api{
   /**
    * Adds an invisble element for use in adding additional context to HTML elements for screen readers and other AT.
    * @param {String | jquery} parent - the complience will be made a direct child of this element in the DOM 
-   * @param {String} posistion - Either 'Append' for after element or 'prepend' to place it before
-   * @param {HTML_element} Html_tagName - the html tag to be placed in dom, use Span for most cases 
+   * @param {String} position - Either 'Append' for after element or 'prepend' to place it before
+   * @param {HTML_element} Html_tagName - the html tag to be placed in DOM, use Span for most cases 
    * @param {String} text - text content of new element
    * @method
    * @example
@@ -55,7 +69,7 @@ class api{
 
   /**
    * Adds WCAG Accordion functionality, such as aria-expanded true/false, to HTML elements
-   * @param {String | jquery} trigger - selector for the dom element that opens/closes accordion
+   * @param {String | jquery} trigger - selector for the DOM element that opens/closes accordion
    * @param {CSS_class} activeClass - class that is toggled to show/hide. if no such class exist pass in an empty string ('')
    * @param {String | jquery} [contentPanel] - DOM element containing hidden content. Use only if no active class is availible
    * @deprecated
@@ -95,7 +109,7 @@ class api{
    * //given:
    * //<h1>page title</h1>
    * //<h3 id="header2">invaild header</h3>
-   * api.setHeadingLevel('.header2',2);
+   * api.setHeadingLevel('#header2',2);
    */
   setHeadingLevel(selector, level){}
   /**
@@ -115,6 +129,15 @@ class api{
    * @deprecated
    */
   addBodyClass(){}
+
+  /**
+   * Adds title tags to html elements.
+   * @param {String | jquery} selector 
+   * @param {String} title - text to be placed in title element
+   * @deprecated - Do not create a title element. use an aria label instead
+   */
+  setTitle(selector, title){}
+
 
 
 

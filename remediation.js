@@ -121,3 +121,81 @@ ele.outerFind(selector).on('keypress',function(e){
     this.click();
   }
 });
+
+/**
+ * 
+ * @param {String | Jquery} trigger - button element
+ * @param {String | Jquery} options 
+ * @param {Boolean} addOptionRole 
+ */
+function fixListbox(trigger, options,addOptionRole=false){
+  if(addOptionRole){
+    $(options).children().attr('role','option');
+  }
+selectBox = trigger;
+  //var selectBox = ele.outerFind('.SelectDropdown__DropdownButton-sc-15hdakp-5.bQzoUX[data-qa="dropdown-button"]');
+selectBox.attr({'aria-haspopup':'listbox','aria-expanded':false});
+//var options = ele.outerFind('[data-qa="options"]');
+var remID = 'ae-REM-id-';
+options.attr({'role':'listbox','tabindex':'-1'});
+options.find('[role="option"]').each(function(i){//todo add in adding of role option
+	$ae(this).attr('id',remID + i);
+});
+
+
+selectBox.on('keypress',function(e){
+  e.preventDefault();
+  setTimeout(function(){
+    if(e.keyCode === 32 || e.keyCode === 13){
+      $ae(e.target).click();
+      selectBox.attr({'aria-expanded':true});
+      options.attr({'aria-activedescendant': remID + '0'});
+      options.attr('aria-hidden','false');
+      AudioEye.focusElement(options.find('[role="option"]').eq(0));
+    }
+  });
+});
+options.on('keydown', function(e){
+  e.preventDefault();
+  var current = Number(options.attr('aria-activedescendant').split('-')[3]);
+	if(e.keyCode === 38){ //up
+      if(current > 0){
+        current--;
+        options.attr('aria-activedescendant', remID + current);
+        AudioEye.focusElement('#'+ remID + current);
+      }
+    }else if(e.keyCode === 40){//down
+      if(current < options.find('[role="option"]').length -1){
+        current++;
+        //console.info('moving to ',current);
+        options.attr('aria-activedescendant', remID + current);
+        AudioEye.focusElement('#'+ remID + current);
+      }
+      
+    }else if(e.keyCode === 13 || e.keyCode === 32){//enter or space
+      $ae(document.activeElement).attr('aria-selected','true');  
+      $ae(document.activeElement).click();
+      selectBox.attr({'aria-haspopup':'listbox','aria-expanded':false});
+      AudioEye.focusElement(selectBox);
+      }else if(e.keyCode === 35){//end key, go to last item
+        current = 50;
+        //console.info('moving to ',current);
+        options.attr('aria-activedescendant', remID + current);
+        AudioEye.focusElement('#'+ remID + current);
+      
+      }else if(e.keyCode === 36){// home key, goto top of list
+      	current = 0;
+        //console.info('moving to ',current);
+        options.attr('aria-activedescendant', remID + current);
+        AudioEye.focusElement('#'+ remID + current);
+        
+      }else if(e.keyCode === 27){//esc key, close menu, refocus on button
+        selectBox.attr('aria-expanded','false');
+        options.attr('aria-hidden','true');
+        options.removeAttr('aria-activedescendant');
+        selectBox.click();
+        AudioEye.focusElement(selectBox);
+      }
+  
+});
+}
