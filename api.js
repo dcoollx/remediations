@@ -100,7 +100,7 @@ class api{
    * //<a id="place1_link" href="place1">go to place1</a> // adjacent links pointing to the same location
    * api.hideFromAt('#place1_img_link')
    */
-  hideFromAt(selector){}
+  hideFromAT(selector){}
   /**
    * Sets the heading level of HTML elements. applies both role and aria-level, can be used on non-header elements
    * @param {String | jquery} selector - DOM element to change to header
@@ -146,5 +146,11 @@ class api{
 
 
 }
+
+/**
+ * Create a tab loop within a DOM container. Use when Site opens an action menu or modal
+ * @param {Jquery | String} container - parent container to create loop within
+ */
+AudioEye.modals.enableTabLoop = (container) =>{}
 
 

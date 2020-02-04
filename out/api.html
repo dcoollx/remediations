@@ -32,9 +32,7 @@
         
             <div class="class-description">This API was developed with the intent to make our lives easier, increase productivity,
 and to make our remediations a little more uniform. The Remediation API is a library of
-functions that we can utilize to do most of the common remediations we encounter.
-when used inside of a rem, use api.[method_name]
-while in the console use AudioEye.remApi.[method_name]</div>
+functions that we can utilize to do most of the common remediations we encounter.when used inside of a rem, use api.[method_name]while in the console use AudioEye.remApi.[method_name]</div>
         
     
 </header>
@@ -542,7 +540,7 @@ while in the console use AudioEye.remApi.[method_name]</div>
 
             
 
-            <td class="description last">the html tag to be placed in dom, use Span for most cases</td>
+            <td class="description last">the html tag to be placed in DOM, use Span for most cases</td>
         </tr>
 
     
@@ -637,11 +635,7 @@ while in the console use AudioEye.remApi.[method_name]</div>
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>//given
-//&lt;a href="new_computers.html">learn more &lt;/a>
-api.addComplianceIndent(ele.outerFind('a[href="new_computers.html"]'),'append','span','about new computers');
-//outputs
-//&lt;a href="new_computers.html">learn more &lt;span class="ae-compliance">about new computers&lt;/span> &lt;/a></code></pre>
+    <pre class="prettyprint"><code>//given//&lt;a href="new_computers.html">learn more &lt;/a>api.addComplianceIndent(ele.outerFind('a[href="new_computers.html"]'),'append','span','about new computers');//outputs//&lt;a href="new_computers.html">learn more &lt;span class="ae-compliance">about new computers&lt;/span> &lt;/a></code></pre>
 
 
 
@@ -1073,7 +1067,7 @@ api.addComplianceIndent(ele.outerFind('a[href="new_computers.html"]'),'append','
 
             
 
-            <td class="description last">selector for the dom element that opens/closes accordion</td>
+            <td class="description last">selector for the DOM element that opens/closes accordion</td>
         </tr>
 
     
@@ -1214,13 +1208,7 @@ api.addComplianceIndent(ele.outerFind('a[href="new_computers.html"]'),'append','
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>//given:
-//&lt;div>
-//&lt;button id="accordionButton">show panel&lt;/button>
-//&lt;div class="show">content panel&lt;/div>
-//&lt;/div>
-api.convertToAccordion(ele.outerFind('#accordionButton'),'show');
- </code></pre>
+    <pre class="prettyprint"><code>//given://&lt;div>//&lt;button id="accordionButton">show panel&lt;/button>//&lt;div class="show">content panel&lt;/div>//&lt;/div>api.convertToAccordion(ele.outerFind('#accordionButton'),'show'); </code></pre>
 
 
 
@@ -1230,7 +1218,7 @@ api.convertToAccordion(ele.outerFind('#accordionButton'),'show');
     
 
     
-    <h4 class="name" id="hideFromAt"><span class="type-signature"></span>hideFromAt<span class="signature">(selector)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="hideFromAT"><span class="type-signature"></span>hideFromAT<span class="signature">(selector)</span><span class="type-signature"></span></h4>
     
 
     
@@ -1365,10 +1353,7 @@ api.convertToAccordion(ele.outerFind('#accordionButton'),'show');
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>//given
-//&lt;a id="place1_img_link" href="place1">&lt;img src="place1.png" alt="place 1"/>&lt;/>
-//&lt;a id="place1_link" href="place1">go to place1&lt;/a> // adjacent links pointing to the same location
-api.hideFromAt('#place1_img_link')</code></pre>
+    <pre class="prettyprint"><code>//given//&lt;a id="place1_img_link" href="place1">&lt;img src="place1.png" alt="place 1"/>&lt;/>//&lt;a id="place1_link" href="place1">go to place1&lt;/a> // adjacent links pointing to the same locationapi.hideFromAt('#place1_img_link')</code></pre>
 
 
 
@@ -1853,10 +1838,7 @@ api.hideFromAt('#place1_img_link')</code></pre>
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>//given:
-//&lt;h1>page title&lt;/h1>
-//&lt;h3 id="header2">invaild header&lt;/h3>
-api.setHeadingLevel('#header2',2);</code></pre>
+    <pre class="prettyprint"><code>//given://&lt;h1>page title&lt;/h1>//&lt;h3 id="header2">invaild header&lt;/h3>api.setHeadingLevel('#header2',2);</code></pre>
 
 
 
@@ -2001,12 +1983,7 @@ api.setHeadingLevel('#header2',2);</code></pre>
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>//given:
-//&lt;table id="tableUseForLayout"> // this table is used for layout purposes, not to display data
-//&lt;td>&lt;p>this is on the left&lt;/p>&lt;/td>
-//&lt;td>&lt;img src="rightside.png"/>&lt;/td>
-//&lt;/table>
-api.setPresentation('#tableUseForLayout')</code></pre>
+    <pre class="prettyprint"><code>//given://&lt;table id="tableUseForLayout"> // this table is used for layout purposes, not to display data//&lt;td>&lt;p>this is on the left&lt;/p>&lt;/td>//&lt;td>&lt;img src="rightside.png"/>&lt;/td>//&lt;/table>api.setPresentation('#tableUseForLayout')</code></pre>
 
 
 
@@ -2197,7 +2174,7 @@ api.setPresentation('#tableUseForLayout')</code></pre>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Jan 31 2020 10:06:46 GMT-0500 (Eastern Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Sat Feb 01 2020 16:34:07 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

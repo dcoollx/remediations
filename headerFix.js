@@ -23,6 +23,7 @@ class Node{
       //a H tag
       this.level = Number(element.tagName.split('')[1]);
     }
+    this.originalLvl = this.level;
   }
   setLevel(lvl){
     this._lvlChanged = true;
@@ -56,6 +57,21 @@ class LL{
   }
   traverse(callback = ()=>false){
     let n = this.head;
+    while(n.next){
+      if(callback(n))
+        return n;
+      n= n.next;
+    }
+    return n;
+  }
+  /**
+   * go thru link list until find node looking for. callback returns node that satifies search
+   * @static
+   * @param {Node} start - point in list to start from 
+   * @callback callback - return true to end the traversal before reaching the end
+   */
+  static traverse(start, callback = ()=>false){
+    let n = start;
     while(n.next){
       if(callback(n))
         return n;
@@ -98,21 +114,50 @@ class LL{
   _display(){
     let output = '';
     this.traverse(n=>{
-      output += n.element.attributes['aria-level'] ? n.element.tagName + '[level '+ n.element.getAttribute('aria-level') + '] weight( '+ n.weight + ' ) ->' :  n.element.tagName + ' weight( '+ n.weight + ' ) -> ';
+      output += n.element.attributes['aria-level'] ? n.element.tagName + '[level '+ n.element.getAttribute('aria-level') + '] ->' :  n.element.tagName + '  -> ';
     });
     return output;
+  }
+  _displayDepth(){
+    let symbol = '-';
+    this.traverse(n=>{
+      console.log(symbol.repeat(n.weight)+ n.element.tagName);
+    });
   }
 }
 //todo check if page is skipped a lvl.
 
 function setHeaderLevelofNode(n,lvl){
   n.element.setAttribute('role','heading');
-  n.element.setAttribute('role','heading');
+  n.element.setAttribute('aria-level',lvl);
 }
 function setHeaderLevelofElement(element,lvl){
   element.setAttribute('role','heading');
-  element.setAttribute('role','heading');
+  element.setAttribute('aria-level',lvl);
 }
+//start algorithms
+let groupFix = (node)=>{
+  let tempList = new LL();// create a new list and make copies
+  let groupWeight = node.weight;
+  let lvlDiff = Math.abs(node.level - node.originalLvl); //todo ensure the diff doesnt over correct
+  LL.traverse(node, (n)=>{
+    if(n.weight >= groupWeight){
+      tempList._addAsNode(n);
+    }else{
+      return true;
+    }
+  });
+  tempList.traverse(n=>changeAllByLvl(n,lvlDiff));
+};
+
+let changeAllByLvl = (node, diff)=>{
+  let lvl = node.level;
+  lvl = lvl - diff;
+  node.setLevel(lvl);
+  node.updateLvl();
+};
+
+
 let oneStepRule = (current)=>{
   let nextlvl = current.next.level;
   if(nextlvl > current.level ){
@@ -130,16 +175,21 @@ let oneStepRule = (current)=>{
   
 };
 
-
-function remHeaders(forcedHeader=null,ignore=null, mainHeaderConfirmed = false, notHeaders = null){//currently only take selector strings
+//end algorithms
+function remHeaders(forcedHeader=null,ignore=null, mainHeaderConfirmed = false, notHeaders = null, analyzeOnly = false){//currently only take selector strings
   console.log('starting header rem');
-  if(forcedHeader){
+  if(forcedHeader){    // find all h1 and set to lvl 2
+    document.querySelectorAll('h1, *[role="heading"][aria-level="1"]').forEach(ele=>{
+      setHeaderLevelofElement(ele,'2');
+    });//set selected main to h1
     setHeaderLevelofElement(document.querySelector(forcedHeader),'1');
     mainHeaderConfirmed = true;
   }
   let list = new LL();
   list.fromArray(document.querySelectorAll('h1,h2,h3,h4,h5,h6,[role="heading"]'));
-  console.log(list._display());
+  if(analyzeOnly)
+    return list;
+  console.log(list._displayDepth());
   list.mainHeader = list.traverse(n=>n.level===1);//create sub ll
   if(list.mainHeader.next===null){
   //there is no main header
@@ -153,6 +203,7 @@ function remHeaders(forcedHeader=null,ignore=null, mainHeaderConfirmed = false, 
     list.mainHeader.prev.next = null;
     list.mainHeader.prev = null;
     subList._addAsNode(list.mainHeader);//todo applie one step rules for sublist, for list aplly specialized checks
+    list.subList = subList;
   //set any lvl 1 other than main to lvl 2
   }else{
     //there is no sublist
