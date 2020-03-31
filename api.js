@@ -33,6 +33,16 @@ class api{
   setAttribute(selector, attributes){}
 
   setAlt(selector,alt_text){}
+  /**
+   * 
+   * @param {String | Jquery} target - element to convert to button
+   * @method
+   * @example
+   * //given
+   * //<div class="button">press here to do stuff</div>
+   * api.convertToBtn(ele.outerFind('div.button')) ;
+   */
+  convertToBtn(target){}
 
   /**
    * Adds role="dialog" to HTML elements.
